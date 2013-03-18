@@ -1,6 +1,6 @@
 {
   "name": "ls-stream",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "readable stream of file paths + stat objects",
   "main": "index.js",
   "scripts": {
