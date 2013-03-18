@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node test.js"
   },
+  "browser": {
+    "./fs-base.js": "./fs-browser.js"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/chrisdickinson/ls-stream.git"
