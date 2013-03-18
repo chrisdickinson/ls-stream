@@ -1,0 +1,26 @@
+{
+  "name": "ls-stream",
+  "version": "0.0.0",
+  "description": "readable stream of file paths + stat objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chrisdickinson/ls-stream.git"
+  },
+  "keywords": [
+    "ls",
+    "-R",
+    "stream"
+  ],
+  "author": "Chris Dickinson <chris@neversaw.us>",
+  "license": "MIT",
+  "dependencies": {
+    "through": "~2.2.7"
+  },
+  "devDependencies": {
+    "tape": "~0.3.0"
+  }
+}
