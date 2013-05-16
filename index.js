@@ -15,6 +15,7 @@ function ls(fs, dir) {
   }
 
   var stream = through()
+    , errored = false
     , pending = 1
     , wd = [dir]
 
@@ -32,6 +33,15 @@ function ls(fs, dir) {
 
   function receive(paths) {
     return function got_entries(err, entries) {
+      if(errored) {
+        return
+      }
+
+      if(err) {
+        errored = true
+        return stream.emit('error', err)
+      }
+
       var pending_stat = entries.length
         , stats = []
 
