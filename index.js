@@ -57,7 +57,7 @@ function ls(fs, dir) {
       function enter(entry, idx) {
         var new_paths = paths.slice()
         new_paths.push(entry)
-        fs.stat(join(new_paths), function(err, stat) {
+        fs.lstat(join(new_paths), function(err, stat) {
           stats[idx] = stat
           !--pending_stat && done()
         })
