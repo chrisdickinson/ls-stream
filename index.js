@@ -1,6 +1,7 @@
-var through = require('through') 
+var through = require('through')
   , path = require('path')
-  , base_fs = require('./fs-base')
+
+var base_fs = require('./fs-base')
 
 module.exports = ls
 
@@ -25,10 +26,10 @@ function ls(fs, dir) {
 
   function start() {
     if(!stream.paused) {
-      fs.readdir(wd[0], receive(wd.slice()))
-    } else {
-      stream.once('drain', start)
+      return fs.readdir(wd[0], receive(wd.slice()))
     }
+
+    stream.once('drain', start)
   }
 
   function receive(paths) {
@@ -39,6 +40,7 @@ function ls(fs, dir) {
 
       if(err) {
         errored = true
+
         return stream.emit('error', err)
       }
 
@@ -52,10 +54,12 @@ function ls(fs, dir) {
       if(!entries.length) {
         done()
       }
+
       return
 
       function enter(entry, idx) {
         var new_paths = paths.slice()
+
         new_paths.push(entry)
         fs.lstat(join(new_paths), function(err, stat) {
           stats[idx] = stat
@@ -65,9 +69,11 @@ function ls(fs, dir) {
 
       function done() {
         var new_paths
+
         for(var i = 0, len = entries.length; i < len; ++i) {
           new_paths = paths.concat([entries[i]])
           stream.queue({path: join(new_paths), stat: stats[i]})
+
           if(stats[i].isDirectory()) {
             ++pending
             fs.readdir(join(new_paths), receive(new_paths))
