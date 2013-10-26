@@ -1,7 +1,7 @@
 var ls = require('./index')
-  , fs = require('fs')
   , path = require('path')
   , test = require('tape')
+  , fs = require('fs')
 
 test('does not emit if paused', function(assert) {
   var stream = ls(path.join(__dirname, 'test-dir'))
@@ -26,12 +26,12 @@ test('does not emit if paused', function(assert) {
 })
 
 test('gets expected data', function(assert) {
-  var expect_dirs
-    , stream = ls(path.join(__dirname, 'test-dir'))
+  var stream = ls(path.join(__dirname, 'test-dir'))
+    , expect_dirs
 
-  expect_dirs = [ 
-    'subdir'
-  ] 
+  expect_dirs = [
+      'subdir'
+  ]
 
   stream
     .on('data', ondata)
@@ -39,6 +39,7 @@ test('gets expected data', function(assert) {
 
   function ondata(entry) {
     var idx
+
     if((idx = expect_dirs.indexOf(path.basename(entry.path))) > -1) {
       assert.ok(entry.stat.isDirectory(), 'is dir')
       expect_dirs.splice(idx, 1)
@@ -49,6 +50,39 @@ test('gets expected data', function(assert) {
 
   function onend() {
     assert.equal(expect_dirs.length, 0)
+    assert.end()
+  }
+})
+
+test('ignore works as expected', function(assert) {
+  var stream = ls(path.join(__dirname, 'test-dir'))
+    , count = 4
+    , expect_dirs
+
+  expect_dirs = [
+      'subdir'
+  ]
+
+  stream
+    .on('data', ondata)
+    .on('end', onend)
+
+  function ondata(entry) {
+    var idx
+
+    if((idx = expect_dirs.indexOf(path.basename(entry.path))) > -1) {
+      entry.ignore()
+      assert.ok(entry.stat.isDirectory(), 'is dir')
+      expect_dirs.splice(idx, 1)
+    } else {
+      assert.ok(entry.stat.isFile())
+      --count
+    }
+  }
+
+  function onend() {
+    assert.equal(expect_dirs.length, 0)
+    assert.equal(count, 0)
     assert.end()
   }
 })
