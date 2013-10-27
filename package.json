@@ -24,6 +24,6 @@
     "through": "~2.2.7"
   },
   "devDependencies": {
-    "tape": "~0.3.0"
+    "tape": "~2.1.0"
   }
 }
